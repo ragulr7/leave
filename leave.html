@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Leave Portal</title>
+    <link rel="stylesheet" href="style.css"> <!-- Link to your CSS file -->
+</head>
+<body>
+    <div class="container">
+        <h2>Leave Permission Request</h2>
+        <form id="leaveForm">
+            <label for="studentName">Student Name:</label>
+            <input type="text" id="studentName" name="studentName" required>
+
+            <label for="studentID">Student ID:</label>
+            <input type="text" id="studentID" name="studentID" required>
+
+            <label for="department">Department:</label>
+            <input type="text" id="department" name="department" required>
+
+            <label for="year">Year:</label>
+            <input type="text" id="year" name="year" required>
+
+            <label for="leaveReason">Reason for Leave:</label>
+            <textarea id="leaveReason" name="leaveReason" rows="4" required></textarea>
+
+            <label for="leaveType">Leave Type:</label>
+            <select id="leaveType" name="leaveType">
+                <option value="Medical">Medical Leave</option>
+                <option value="Casual">Casual Leave</option>
+            </select>
+
+            <label for="startDate">Start Date:</label>
+            <input type="date" id="startDate" name="startDate">
+
+            <label for="endDate">End Date:</label>
+            <input type="date" id="endDate" name="endDate">
+
+            <button type="submit">Submit Request</button>
+        </form>
+
+        <div class="leave-balance">
+            <h3>Leave Balance:</h3>
+            <p id="leaveBalance">50 days</p>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize the leave balance
+            let leaveBalance = 50; // Initial leave balance
+
+            // Update leave balance on the page
+            function updateLeaveBalance() {
+                const leaveBalanceElement = document.getElementById('leaveBalance');
+                leaveBalanceElement.textContent = leaveBalance + ' days';
+            }
+
+            updateLeaveBalance(); // Initial display of leave balance
+
+            // Handle leave submission
+            const leaveForm = document.getElementById('leaveForm');
+            leaveForm.addEventListener('submit', function(event) {
+                event.preventDefault();
+
+                // Get leave start and end dates from the form
+                const startDate = document.getElementById('startDate').value;
+                const endDate = document.getElementById('endDate').value;
+
+                // Check if the leave balance is greater than zero
+                if (leaveBalance > 0) {
+                    // Decrease the leave balance by the number of days requested
+                    const daysRequested = Math.ceil((new Date(endDate) - new Date(startDate)) / (1000 * 60 * 60 * 24));
+                    if (leaveBalance >= daysRequested) {
+                        leaveBalance -= daysRequested;
+
+                        // Update leave balance on the page
+                        updateLeaveBalance();
+
+                        // Display a success message (you can replace this with your own logic)
+                        alert('Leave request submitted successfully for ' + daysRequested + ' days from ' + startDate + ' to ' + endDate);
+                    } else {
+                        // Display an error message (insufficient leave balance)
+                        alert('Insufficient leave balance. You have ' + leaveBalance + ' days remaining.');
+                    }
+                } else {
+                    // Display an error message (leave balance exhausted)
+                    alert('Leave balance is exhausted. You cannot request leave.');
+                }
+            });
+        });
+    </script> <!-- Link to your JavaScript file -->
+</body>
+</html>
